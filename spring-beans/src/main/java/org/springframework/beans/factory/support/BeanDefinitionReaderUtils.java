@@ -60,6 +60,7 @@ public class BeanDefinitionReaderUtils {
 		bd.setParentName(parentName);
 		if (className != null) {
 			if (classLoader != null) {
+				//使用类加载器返回Class对象
 				bd.setBeanClass(ClassUtils.forName(className, classLoader));
 			}
 			else {
@@ -85,17 +86,21 @@ public class BeanDefinitionReaderUtils {
 	public static String generateBeanName(
 			BeanDefinition definition, BeanDefinitionRegistry registry, boolean isInnerBean)
 			throws BeanDefinitionStoreException {
-
+		//获取class属性值
 		String generatedBeanName = definition.getBeanClassName();
 		if (generatedBeanName == null) {
+			//class属性值为空，则获取parent属性，parent属性为空，则获取factory-bean属性
 			if (definition.getParentName() != null) {
+				//在parent属性后加$child作为beanName
 				generatedBeanName = definition.getParentName() + "$child";
 			}
 			else if (definition.getFactoryBeanName() != null) {
+				//在factory-bean属性后加$created作为beanName
 				generatedBeanName = definition.getFactoryBeanName() + "$created";
 			}
 		}
 		if (!StringUtils.hasText(generatedBeanName)) {
+			//抛出异常
 			throw new BeanDefinitionStoreException("Unnamed bean definition specifies neither " +
 					"'class' nor 'parent' nor 'factory-bean' - can't generate bean name");
 		}
