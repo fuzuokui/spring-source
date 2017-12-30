@@ -448,7 +448,7 @@ public class BeanDefinitionParserDelegate {
 	 * {@link org.springframework.beans.factory.parsing.ProblemReporter}.
 	 */
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, BeanDefinition containingBean) {
-		//bean±êÇ©µÄIDºÍnameÊôĞÔ
+		//beanæ ‡ç­¾ä¸­çš„idå’Œnameå±æ€§
 		String id = ele.getAttribute(ID_ATTRIBUTE);
 		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
 
@@ -459,7 +459,7 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		String beanName = id;
-		//idÎŞÖµÇÒnameÓĞÖµ
+		//idä¸ºç©ºä¸”nameå±æ€§ä¸ä¸ºç©º
 		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {
 			beanName = aliases.remove(0);
 			if (logger.isDebugEnabled()) {
@@ -536,9 +536,9 @@ public class BeanDefinitionParserDelegate {
 	 */
 	public AbstractBeanDefinition parseBeanDefinitionElement(
 			Element ele, String beanName, BeanDefinition containingBean) {
-
+		//å°†beanNameå‹æ ˆ
 		this.parseState.push(new BeanEntry(beanName));
-
+		//è·å–ç±»å
 		String className = null;
 		if (ele.hasAttribute(CLASS_ATTRIBUTE)) {
 			className = ele.getAttribute(CLASS_ATTRIBUTE).trim();
@@ -546,6 +546,7 @@ public class BeanDefinitionParserDelegate {
 
 		try {
 			String parent = null;
+			//è·å–parentå±æ€§
 			if (ele.hasAttribute(PARENT_ATTRIBUTE)) {
 				parent = ele.getAttribute(PARENT_ATTRIBUTE);
 			}
