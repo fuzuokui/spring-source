@@ -654,6 +654,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		if (beanDefinition instanceof AbstractBeanDefinition) {
 			try {
+				//校验methodOverrides是否与工厂方法并存或者对应的methodOverrides对应的方法根本不存在 fuzuokui
 				((AbstractBeanDefinition) beanDefinition).validate();
 			}
 			catch (BeanDefinitionValidationException ex) {
@@ -663,11 +664,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		BeanDefinition oldBeanDefinition;
-
+		//防止并发，进行同步处理
 		synchronized (this.beanDefinitionMap) {
 			oldBeanDefinition = this.beanDefinitionMap.get(beanName);
 			if (oldBeanDefinition != null) {
 				if (!this.allowBeanDefinitionOverriding) {
+					//如果beanName已经注册，并且不允许覆盖，则抛出异常 fuzuokui
 					throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,
 							"Cannot register bean definition [" + beanDefinition + "] for bean '" + beanName +
 							"': There is already [" + oldBeanDefinition + "] bound.");
@@ -680,13 +682,16 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				}
 			}
 			else {
+				//记录beanName fuzuokui
 				this.beanDefinitionNames.add(beanName);
 				this.frozenBeanDefinitionNames = null;
 			}
+			//注册beanDefinition fuzuokui
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
 
 		if (oldBeanDefinition != null || containsSingleton(beanName)) {
+			//重置所有beanName对应的缓存
 			resetBeanDefinition(beanName);
 		}
 	}
