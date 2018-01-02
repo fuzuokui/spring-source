@@ -80,19 +80,19 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/** Logger available to subclasses */
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	/** Cache of singleton objects: bean name --> bean instance */
+	/** Cache of singleton objects: bean name --> bean instance 单例对象map集合*/
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(64);
 
-	/** Cache of singleton factories: bean name --> ObjectFactory */
+	/** Cache of singleton factories: bean name --> ObjectFactory 单例的工厂bean集合*/
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<String, ObjectFactory<?>>(16);
 
-	/** Cache of early singleton objects: bean name --> bean instance */
+	/** Cache of early singleton objects: bean name --> bean instance 早期单例对象map集合*/
 	private final Map<String, Object> earlySingletonObjects = new HashMap<String, Object>(16);
 
-	/** Set of registered singletons, containing the bean names in registration order */
+	/** Set of registered singletons, containing the bean names in registration order 已注册的单例对象名称*/
 	private final Set<String> registeredSingletons = new LinkedHashSet<String>(64);
 
-	/** Names of beans that are currently in creation (using a ConcurrentHashMap as a Set) */
+	/** Names of beans that are currently in creation (using a ConcurrentHashMap as a Set) 当前正在创建的单例对象集合*/
 	private final Map<String, Boolean> singletonsCurrentlyInCreation = new ConcurrentHashMap<String, Boolean>(16);
 
 	/** Names of beans currently excluded from in creation checks (using a ConcurrentHashMap as a Set) */
@@ -178,11 +178,12 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+			//对象正在创建中
 			synchronized (this.singletonObjects) {
 				singletonObject = this.earlySingletonObjects.get(beanName);
-				if (singletonObject == null && allowEarlyReference) {
+				if (singletonObject == null && allowEarlyReference) {//早期单例集合中也没有
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
-					if (singletonFactory != null) {
+					if (singletonFactory != null) {//工厂不为空，从工厂获取bean
 						singletonObject = singletonFactory.getObject();
 						this.earlySingletonObjects.put(beanName, singletonObject);
 						this.singletonFactories.remove(beanName);

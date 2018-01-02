@@ -213,7 +213,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Return an instance, which may be shared or independent, of the specified bean.
+	 * Return an instance, which may be shared or independent(共享或独立), of the specified bean.
 	 * @param name the name of the bean to retrieve
 	 * @param requiredType the required type of the bean to retrieve
 	 * @param args arguments to use if creating a prototype using explicit arguments to a
@@ -232,6 +232,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
+		//直接尝试从缓存获取或singletonFactories中的ObjectFactory中获取
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isDebugEnabled()) {
@@ -1013,7 +1014,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	/**
 	 * Return the bean name, stripping out the factory dereference prefix if necessary,
-	 * and resolving aliases to canonical names.
+	 * and resolving aliases to canonical names(将别名解析成规范名称).
 	 * @param name the user-specified name
 	 * @return the transformed bean name
 	 */

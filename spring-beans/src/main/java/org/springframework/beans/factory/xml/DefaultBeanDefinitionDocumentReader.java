@@ -207,6 +207,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			importBeanDefinitionResource(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, ALIAS_ELEMENT)) {
+			//处理alias标签
 			processAliasRegistration(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) {
@@ -236,6 +237,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		Set<Resource> actualResources = new LinkedHashSet<Resource>(4);
 
 		// Discover whether the location is an absolute or relative URI
+		//location是绝对地址还是相对地址
 		boolean absoluteLocation = false;
 		try {
 			absoluteLocation = ResourcePatternUtils.isUrl(location) || ResourceUtils.toURI(location).isAbsolute();
@@ -247,6 +249,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 		// Absolute or relative?
 		if (absoluteLocation) {
+			//绝对路径
 			try {
 				int importCount = getReaderContext().getReader().loadBeanDefinitions(location, actualResources);
 				if (logger.isDebugEnabled()) {
@@ -260,6 +263,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 		else {
 			// No URL -> considering resource location as relative to the current file.
+			//相对路径
 			try {
 				int importCount;
 				Resource relativeResource = getReaderContext().getResource().createRelative(location);
@@ -335,6 +339,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 						bdHolder.getBeanName() + "'", ele, ex);
 			}
 			// Send registration event.
+			//通知监听器解析及注册完成。用于扩展，spring没做逻辑处理
 			getReaderContext().fireComponentRegistered(new BeanComponentDefinition(bdHolder));
 		}
 	}

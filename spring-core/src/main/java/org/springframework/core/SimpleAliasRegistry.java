@@ -48,6 +48,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 			this.aliasMap.remove(alias);
 		}
 		else {
+			//不允许重写  fuzuokui 20171216
 			if (!allowAliasOverriding()) {
 				String registeredName = this.aliasMap.get(alias);
 				if (registeredName != null && !registeredName.equals(name)) {
@@ -141,7 +142,8 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
-	 * Determine the raw name, resolving aliases to canonical names.
+	 * Determine the raw name, resolving aliases to canonical names.(确定原始名称，将别名解析成标准名称)
+	 * 如果别名A指向别名B，别名B指向名称为C的bean，则返回C
 	 * @param name the user-specified name
 	 * @return the transformed name
 	 */
