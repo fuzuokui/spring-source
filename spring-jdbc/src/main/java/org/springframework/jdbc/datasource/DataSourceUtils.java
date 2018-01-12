@@ -109,11 +109,12 @@ public abstract class DataSourceUtils {
 
 		logger.debug("Fetching JDBC Connection from DataSource");
 		Connection con = dataSource.getConnection();
-
+		//当前线程支持同步
 		if (TransactionSynchronizationManager.isSynchronizationActive()) {
 			logger.debug("Registering transaction synchronization for JDBC Connection");
 			// Use same Connection for further JDBC actions within the transaction.
 			// Thread-bound object will get removed by synchronization at transaction completion.
+			//在事务中使用同一数据库连接
 			ConnectionHolder holderToUse = conHolder;
 			if (holderToUse == null) {
 				holderToUse = new ConnectionHolder(con);
