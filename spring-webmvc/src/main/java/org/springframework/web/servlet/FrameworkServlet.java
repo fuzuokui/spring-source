@@ -459,7 +459,9 @@ public abstract class FrameworkServlet extends HttpServletBean {
 		long startTime = System.currentTimeMillis();
 
 		try {
+			//WebApplicationContext的初始化
 			this.webApplicationContext = initWebApplicationContext();
+			//空方法。设计为子类覆盖
 			initFrameworkServlet();
 		}
 		catch (ServletException ex) {
@@ -494,6 +496,7 @@ public abstract class FrameworkServlet extends HttpServletBean {
 
 		if (this.webApplicationContext != null) {
 			// A context instance was injected at construction time -> use it
+			//context实例在构造函数中被注入
 			wac = this.webApplicationContext;
 			if (wac instanceof ConfigurableWebApplicationContext) {
 				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
@@ -505,6 +508,7 @@ public abstract class FrameworkServlet extends HttpServletBean {
 						// the root application context (if any; may be null) as the parent
 						cwac.setParent(rootContext);
 					}
+					//刷新上下文环境
 					configureAndRefreshWebApplicationContext(cwac);
 				}
 			}
@@ -514,6 +518,7 @@ public abstract class FrameworkServlet extends HttpServletBean {
 			// has been registered in the servlet context. If one exists, it is assumed
 			// that the parent context (if any) has already been set and that the
 			// user has performed any initialization such as setting the context id
+			//在servlet context中查找WebApplicationContext
 			wac = findWebApplicationContext();
 		}
 		if (wac == null) {
